@@ -22,10 +22,15 @@ Route::get('/', function () {
 Route::prefix('events')->name('events.')->group(function () {
     Route::get('/', [EventsController::class, 'index'])->name('events-index');
     Route::get('/show/{id}', [EventsController::class, 'show'])->name('show');
-    Route::get('/{id}/edit', [EventsController::class, 'edit'])->name('edit');
-    Route::get('/create', [EventsController::class, 'create'])->name('create');
+    Route::get('/{id}/edit', [EventsController::class, 'edit'])->name('edit')->middleware('auth');
+    Route::get('/create', [EventsController::class, 'create'])->name('create')->middleware('auth');
     Route::post('/', [EventsController::class, 'store'])->name('store');
+    Route::get('/third-party', [EventsController::class, 'getApi'])->name('getApi');
 
     Route::put('/{id}/update', [EventsController::class, 'update'])->name('update');
-    Route::delete('/delete/{id}', [EventsController::class, 'destroy'])->name('destroy');
+    Route::delete('/delete/{id}', [EventsController::class, 'destroy'])->name('destroy')->middleware('auth');
 });
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
